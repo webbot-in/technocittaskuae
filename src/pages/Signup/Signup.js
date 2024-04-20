@@ -111,7 +111,7 @@ function Signup() {
         else if (textFieldValue.mobile === '') {
             enqueueSnackbar('Please enter your mobile', { variant: 'error', preventDuplicate: true });
         }
-        else if (dayjs(textFieldValue.dob, format).isAfter(dayjs(currentDate, format))) {
+        else if (textFieldValue.dob === '' || dayjs(textFieldValue.dob, format).isAfter(dayjs(currentDate, format))) {
             enqueueSnackbar('Please enter Valid dateofbirth', { variant: 'error', preventDuplicate: true });
         }
         else if (textFieldValue.sportID === 0) {
@@ -162,6 +162,7 @@ function Signup() {
                             index !== 5 ?
                                 <TextField
                                     type={index === 4 || index === 6 || index === 8 ? 'number' : 'text'}
+                                    onKeyPress={(e) => e.key === 'Enter' && signUpFn()}
                                     onInput={
                                         index === 4 || index === 6 || index === 8
                                             ?
@@ -193,7 +194,7 @@ function Signup() {
                                             textField: {
                                                 size: 'small',
                                                 error: false,
-                                                fullWidth: true
+                                                fullWidth: true,
                                             },
                                         }}
                                     />

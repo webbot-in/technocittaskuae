@@ -60,7 +60,7 @@ function Login() {
         else {
             setLoading(true)
             axios.post('https://cors-h8hq.onrender.com/http://31.220.82.50:202/api/Auth/Authentication', textFieldValue).then((res) => {
-                navigate('/home', { state: res.data })
+                navigate('/home')
                 localStorage.setItem('token', res.data.token)
                 enqueueSnackbar('Login Success', { variant: 'success', preventDuplicate: true });
             }).catch((err) => {
@@ -92,7 +92,7 @@ function Login() {
                     <Stack gap={2} alignItems={'center'} justifyContent={'center'} sx={{ mx: 2, mb: 2, width: { xs: 'initial', md: 300, height: 300 } }}>
                         <h1>Login</h1>
                         {textFieldList.map((items, index) => (
-                            <TextField key={index} fullWidth placeholder={items.placeHolder} size='small' value={items.value} error={items.error} helperText={items.helperTxt} onChange={items.onChangeFn} />
+                            <TextField key={index} fullWidth placeholder={items.placeHolder} size='small' value={items.value} error={items.error} helperText={items.helperTxt} onKeyPress={(e) => e.key === 'Enter' && loginFn()} onChange={items.onChangeFn} />
                         ))}
                         <Button variant='contained' disabled={loading} fullWidth onClick={loginFn} sx={{ bgcolor: loading ? 'white' : 'black', ":hover": { bgcolor: loading ? 'white' : 'black' } }}>{loading ? 'Logging in...' : 'Login'}</Button>
                         <Typography onClick={signUpFn} sx={{ textDecoration: 'underline', cursor: 'pointer', "::selection": { userSelect: 'none' } }}>Signup</Typography>
