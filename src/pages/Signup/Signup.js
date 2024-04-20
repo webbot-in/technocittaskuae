@@ -1,6 +1,6 @@
-import { Button, Card, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import { Button, Card, Stack, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -148,6 +148,12 @@ function Signup() {
     const loginFn = () => {
         navigate('/')
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/home')
+        }
+    }, [])
     return (
         <>
             <Stack alignItems={'center'} justifyContent={'center'} sx={{ height: '100vh' }}>
@@ -195,7 +201,7 @@ function Signup() {
                                     />
                                 </LocalizationProvider>
                         ))}
-                        <Button variant='contained' fullWidth onClick={signUpFn} sx={{ bgcolor: 'black', ":hover": { bgcolor: 'black' } }}>{ loading ? <CircularProgress /> : 'Signup'}</Button>
+                        <Button variant='contained' disabled={loading} fullWidth onClick={signUpFn} sx={{ bgcolor: loading ? 'white' : 'black', ":hover": { bgcolor: loading ? 'white' : 'black' } }}>{loading ? 'Signing up...' : 'Signup'}</Button>
                         <Typography onClick={loginFn} sx={{ textDecoration: 'underline', cursor: 'pointer', "::selection": { userSelect: 'none' } }}>Login</Typography>
                     </Stack>
                 </Card>

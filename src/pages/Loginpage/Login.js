@@ -1,11 +1,13 @@
 import { Button, Card, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 function Login() {
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar();
+    const [loading, setLoading] = useState()
     const [textFieldValue, setTextFieldValue] = useState({
         email: '',
         password: '',
@@ -56,13 +58,34 @@ function Login() {
             }))
         }
         else {
-            enqueueSnackbar('Login Success', { variant: 'success', preventDuplicate: true });
+            setLoading(true)
+            axios.post('https://cors-h8hq.onrender.com/http://31.220.82.50:202/api/Auth/Authentication', textFieldValue).then((res) => {
+                console.log(res)
+                navigate('/home', { state: res.data })
+                localStorage.setItem('token', res.data.token)
+                enqueueSnackbar('Login Success', { variant: 'success', preventDuplicate: true });
+            }).catch((err) => {
+                if (err.response.status === 404) {
+                    enqueueSnackbar(err.response.data, { variant: 'error', preventDuplicate: true });
+                }
+                else {
+                    enqueueSnackbar('Try again later', { variant: 'error', preventDuplicate: true });
+                }
+                console.log(err)
+                setLoading(false)
+            })
         }
     }
 
     const signUpFn = () => {
         navigate('/signup')
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/home')
+        }
+    }, [])
 
     return (
         <>
@@ -73,7 +96,7 @@ function Login() {
                         {textFieldList.map((items, index) => (
                             <TextField key={index} fullWidth placeholder={items.placeHolder} size='small' value={items.value} error={items.error} helperText={items.helperTxt} onChange={items.onChangeFn} />
                         ))}
-                        <Button variant='contained' fullWidth onClick={loginFn} sx={{ bgcolor: 'black', ":hover": { bgcolor: 'black' } }}>Login</Button>
+                        <Button variant='contained' disabled={loading} fullWidth onClick={loginFn} sx={{ bgcolor: loading ? 'white' : 'black', ":hover": { bgcolor: loading ? 'white' : 'black' } }}>{loading ? 'Logging in...' : 'Login'}</Button>
                         <Typography onClick={signUpFn} sx={{ textDecoration: 'underline', cursor: 'pointer', "::selection": { userSelect: 'none' } }}>Signup</Typography>
                     </Stack>
                 </Card>
