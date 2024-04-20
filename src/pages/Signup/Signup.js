@@ -126,7 +126,6 @@ function Signup() {
         else {
             setLoading(true)
             axios.post('https://cors-h8hq.onrender.com/http://31.220.82.50:202/api/Auth/Register', textFieldValue).then((res) => {
-                console.log(res)
                 navigate('/home', { state: res.data })
                 localStorage.setItem('token', res.data.token)
             }).catch((err) => {
@@ -139,7 +138,6 @@ function Signup() {
                 else {
                     enqueueSnackbar('Try again later', { variant: 'error', preventDuplicate: true });
                 }
-                console.log(err)
                 setLoading(false)
             })
         }

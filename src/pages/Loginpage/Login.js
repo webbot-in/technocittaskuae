@@ -60,7 +60,6 @@ function Login() {
         else {
             setLoading(true)
             axios.post('https://cors-h8hq.onrender.com/http://31.220.82.50:202/api/Auth/Authentication', textFieldValue).then((res) => {
-                console.log(res)
                 navigate('/home', { state: res.data })
                 localStorage.setItem('token', res.data.token)
                 enqueueSnackbar('Login Success', { variant: 'success', preventDuplicate: true });
@@ -71,7 +70,6 @@ function Login() {
                 else {
                     enqueueSnackbar('Try again later', { variant: 'error', preventDuplicate: true });
                 }
-                console.log(err)
                 setLoading(false)
             })
         }

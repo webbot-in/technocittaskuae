@@ -13,7 +13,6 @@ function Home() {
         role: localStorage.getItem('token') && decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
     }
     const { name, role, email } = docodedData ? docodedData : false;
-    console.log(name)
     const logoutFn = () => {
         navigate('/')
         localStorage.removeItem('token')
@@ -21,7 +20,6 @@ function Home() {
 
     useEffect(() => {
         const isValidToken = tokenVerify()
-        console.log(isValidToken)
         if (!isValidToken) {
             navigate('/')
         }
