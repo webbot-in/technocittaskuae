@@ -43,14 +43,14 @@ function Login() {
     }]
 
     const loginFn = () => {
-        if (textFieldValue.email === '') {
+        if (!textFieldValue.email) {
             setTextFieldValue((prevData) => ({
                 ...prevData,
                 emailErr: true,
                 emailErrMessage: 'Please enter your emailID'
             }))
         }
-        else if (textFieldValue.password === '') {
+        else if (!textFieldValue.password) {
             setTextFieldValue((prevData) => ({
                 ...prevData,
                 passwordErr: true,

@@ -19,10 +19,12 @@ function Signup() {
         role: "",
         mobile: "",
         dob: "",
-        sportID: 0,
+        sportID: "",
         machineId: "",
-        yearsOfExp: 0
+        yearsOfExp: ""
     })
+
+    console.log(textFieldValue)
 
     const textFieldList = [{
         placeHolder: 'Enter Your Name',
@@ -75,7 +77,7 @@ function Signup() {
         value: textFieldValue.sportID,
         onChangeFn: (e) => setTextFieldValue((prevData) => ({
             ...prevData,
-            sportID: parseFloat(e.target.value),
+            sportID: e.target.value,
         }))
     }, {
         placeHolder: 'Enter Your machineId',
@@ -89,39 +91,36 @@ function Signup() {
         value: textFieldValue.yearsOfExp,
         onChangeFn: (e) => setTextFieldValue((prevData) => ({
             ...prevData,
-            yearsOfExp: parseFloat(e.target.value),
+            yearsOfExp: e.target.value,
         }))
     }]
 
-    const signUpFn = () => {
+    const validateAndEnqueueSnackbar = (field, message) => {
         const currentDate = dayjs();
         const format = 'DD/MM/YYYY';
-        if (textFieldValue.name === '') {
-            enqueueSnackbar('Please enter your name', { variant: 'error', preventDuplicate: true });
+        if (!field || (message === 'Please enter a valid date of birth' && dayjs(textFieldValue.dob, format).isAfter(dayjs(currentDate, format)))) {
+            enqueueSnackbar(message, { variant: 'error', preventDuplicate: true });
+            return false;
         }
-        else if (textFieldValue.email === '') {
-            enqueueSnackbar('Please enter your email ID', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.password === '') {
-            enqueueSnackbar('Please enter your password', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.role === '') {
-            enqueueSnackbar('Please enter your role', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.mobile === '') {
-            enqueueSnackbar('Please enter your mobile', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.dob === '' || dayjs(textFieldValue.dob, format).isAfter(dayjs(currentDate, format))) {
-            enqueueSnackbar('Please enter Valid dateofbirth', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.sportID === 0) {
-            enqueueSnackbar('Please enter your sportID', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.machineId === '') {
-            enqueueSnackbar('Please enter your machineId', { variant: 'error', preventDuplicate: true });
-        }
-        else if (textFieldValue.yearsOfExp === 0) {
-            enqueueSnackbar('Please enter your yearsOfExp', { variant: 'error', preventDuplicate: true });
+        return true;
+    };
+
+    const signUpFn = () => {
+        if (
+            !validateAndEnqueueSnackbar(textFieldValue.name, 'Please enter your name') ||
+            !validateAndEnqueueSnackbar(textFieldValue.email, 'Please enter your email ID') ||
+            !validateAndEnqueueSnackbar(textFieldValue.password, 'Please enter your password') ||
+            !validateAndEnqueueSnackbar(textFieldValue.role, 'Please enter your role') ||
+            !validateAndEnqueueSnackbar(textFieldValue.mobile, 'Please enter your mobile') ||
+            !validateAndEnqueueSnackbar(
+                textFieldValue.dob,
+                'Please enter a valid date of birth'
+            ) ||
+            !validateAndEnqueueSnackbar(textFieldValue.sportID, 'Please enter your sportID') ||
+            !validateAndEnqueueSnackbar(textFieldValue.machineId, 'Please enter your machineId') ||
+            !validateAndEnqueueSnackbar(textFieldValue.yearsOfExp, 'Please enter your yearsOfExp')
+        ) {
+            setLoading(false);
         }
         else {
             setLoading(true)
@@ -184,7 +183,7 @@ function Signup() {
                                     }}
                                 />
                                 :
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <LocalizationProvider  dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         format='DD/MM/YYYY'
                                         value={dayjs(items.value)}
@@ -194,7 +193,7 @@ function Signup() {
                                             textField: {
                                                 size: 'small',
                                                 error: false,
-                                                fullWidth: true,
+                                                fullWidth: true
                                             },
                                         }}
                                     />
