@@ -64,7 +64,12 @@ function Login() {
                 localStorage.setItem('token', res.data.token)
                 enqueueSnackbar('Login Success', { variant: 'success', preventDuplicate: true });
             }).catch((err) => {
-                if (err.response.status === 404) {
+                console.log(err)
+                if (err.response.status === 400) {
+                    const firstKey = Object.keys(err.response.data.errors)[0];
+                    enqueueSnackbar(err.response.data.errors[firstKey][0], { variant: 'error', preventDuplicate: true });
+                }
+                else if (err.response.status === 404) {
                     enqueueSnackbar(err.response.data, { variant: 'error', preventDuplicate: true });
                 }
                 else {
