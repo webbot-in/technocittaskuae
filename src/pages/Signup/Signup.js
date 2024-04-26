@@ -24,8 +24,6 @@ function Signup() {
         yearsOfExp: ""
     })
 
-    console.log(textFieldValue)
-
     const textFieldList = [{
         placeHolder: 'Enter Your Name',
         value: textFieldValue.name,
@@ -124,8 +122,10 @@ function Signup() {
         }
         else {
             setLoading(true)
+            textFieldValue.sportID = parseInt(textFieldValue.sportID);
+            textFieldValue.yearsOfExp = parseInt(textFieldValue.yearsOfExp);
             axios.post('https://cors-h8hq.onrender.com/http://31.220.82.50:202/api/Auth/Register', textFieldValue).then((res) => {
-                navigate('/home', { state: res.data })
+                navigate('/home')
                 localStorage.setItem('token', res.data.token)
             }).catch((err) => {
                 if (err.response.status === 500) {
