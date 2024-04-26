@@ -132,7 +132,8 @@ function Signup() {
                     enqueueSnackbar('EmailID already register or invalid DOB', { variant: 'error', preventDuplicate: true });
                 }
                 else if (err.response.status === 400) {
-                    enqueueSnackbar(err.response.data.errors.Email[0], { variant: 'error', preventDuplicate: true });
+                    const firstKey = Object.keys(err.response.data.errors)[0];
+                    enqueueSnackbar(err.response.data.errors[firstKey][0], { variant: 'error', preventDuplicate: true });
                 }
                 else {
                     enqueueSnackbar('Try again later', { variant: 'error', preventDuplicate: true });
@@ -160,6 +161,7 @@ function Signup() {
                         {textFieldList.map((items, index) => (
                             index !== 5 ?
                                 <TextField
+                                    key={index}
                                     type={index === 4 || index === 6 || index === 8 ? 'number' : 'text'}
                                     onKeyPress={(e) => e.key === 'Enter' && signUpFn()}
                                     onInput={
@@ -183,7 +185,7 @@ function Signup() {
                                     }}
                                 />
                                 :
-                                <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                                <LocalizationProvider key={index} dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         format='DD/MM/YYYY'
                                         value={dayjs(items.value)}
